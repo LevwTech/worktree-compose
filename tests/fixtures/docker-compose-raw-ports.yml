@@ -1,0 +1,15 @@
+services:
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "8080:80"
+
+  api:
+    build: ./api
+    ports:
+      - "3000:3000"
+
+  db:
+    image: mysql:8
+    ports:
+      - "3306:3306"

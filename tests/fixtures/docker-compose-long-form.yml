@@ -1,0 +1,13 @@
+services:
+  backend:
+    build: ./backend
+    ports:
+      - target: 8000
+        published: "${BACKEND_PORT:-8000}"
+        protocol: tcp
+
+  frontend:
+    build: ./frontend
+    ports:
+      - target: 3000
+        published: "${FRONTEND_PORT:-3000}"
