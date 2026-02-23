@@ -29,6 +29,14 @@
     "development",
     "mcp"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LevwTech/worktree-compose.git"
+  },
+  "bugs": {
+    "url": "https://github.com/LevwTech/worktree-compose/issues"
+  },
+  "homepage": "https://github.com/LevwTech/worktree-compose#readme",
   "license": "MIT",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.12.1",
