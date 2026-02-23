@@ -6,7 +6,9 @@ Zero-config Docker Compose isolation for git worktrees.
 
 Every worktree gets its own ports, database, cache, and containers — automatically.
 
-<video src="https://github.com/LevwTech/worktree-compose/raw/main/wtc-explainer.mp4" controls autoplay muted loop></video>
+
+https://github.com/user-attachments/assets/fe05a2ff-954b-4e4f-b01b-ad17f1233abf
+
 
 ```bash
 npm install -D worktree-compose
