@@ -202,7 +202,7 @@ npx wtc clean
 
 ```json
 {
-  "sync": ["backend/alembic", "backend/alembic.ini"],
+  "sync": [".generated/prisma-client", "local-certs/"],
   "envOverrides": {
     "VITE_API_URL": "http://localhost:${BACKEND_PORT}"
   }
@@ -213,7 +213,7 @@ Or use a `"wtc"` key in `package.json`.
 
 ### `sync`
 
-Extra files/directories to copy from main into each worktree on start. Use for migration configs, seed scripts, or anything not on the worktree's branch.
+Extra files/directories to copy from main into each worktree on start. Use for gitignored or generated files that Docker needs but aren't committed — like generated clients, local certificates, or build artifacts.
 
 ### `envOverrides`
 
