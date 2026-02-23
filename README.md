@@ -1,5 +1,7 @@
 # worktree-compose (wtc)
 
+[![npm](https://img.shields.io/npm/v/worktree-compose?label=npm)](https://www.npmjs.com/package/worktree-compose)
+
 Zero-config Docker Compose isolation for git worktrees.
 
 Every worktree gets its own ports, database, cache, and containers — automatically.
