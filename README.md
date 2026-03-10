@@ -4,7 +4,7 @@
 
 Zero-config Docker Compose isolation for git worktrees.
 
-Every worktree gets its own ports, database, cache, and containers — automatically.
+Every worktree gets its own ports, database, cache, and containers — automatically. [#1 DevHunt Product of the week](https://devhunt.org/tool/worktree-compose)
 
 
 https://github.com/user-attachments/assets/fe05a2ff-954b-4e4f-b01b-ad17f1233abf
