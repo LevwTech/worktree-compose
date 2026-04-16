@@ -43,8 +43,8 @@ export function startCommand(indices: number[]): void {
     injectPortOverrides(
       `${wt.path}/.env`,
       allocations,
-      ctx.config.envOverrides,
       project,
+      ctx.config.envOverrides,
     );
     log.success("Injected port overrides into .env");
 

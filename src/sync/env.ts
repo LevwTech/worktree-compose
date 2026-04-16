@@ -20,17 +20,14 @@ export function stripOverrideBlock(content: string): string {
 
 export function buildOverrideBlock(
   allocations: PortAllocation[],
+  projectName: string,
   envOverrides?: Record<string, string>,
-  projectName?: string,
 ): string {
-  const lines: string[] = [BLOCK_START];
+  const lines: string[] = [BLOCK_START, `COMPOSE_PROJECT_NAME=${projectName}`];
 
-  const interpolations = new Map<string, string>();
-
-  if (projectName) {
-    lines.push(`COMPOSE_PROJECT_NAME=${projectName}`);
-    interpolations.set("COMPOSE_PROJECT_NAME", projectName);
-  }
+  const interpolations = new Map<string, string>([
+    ["COMPOSE_PROJECT_NAME", projectName],
+  ]);
 
   for (const a of allocations) {
     lines.push(`${a.envVar}=${a.port}`);
@@ -54,8 +51,8 @@ export function buildOverrideBlock(
 export function injectPortOverrides(
   envPath: string,
   allocations: PortAllocation[],
+  projectName: string,
   envOverrides?: Record<string, string>,
-  projectName?: string,
 ): void {
   let content = "";
   if (fs.existsSync(envPath)) {
@@ -64,7 +61,7 @@ export function injectPortOverrides(
 
   content = stripOverrideBlock(content);
 
-  const block = buildOverrideBlock(allocations, envOverrides, projectName);
+  const block = buildOverrideBlock(allocations, projectName, envOverrides);
   const result = content.trimEnd() + "\n\n" + block + "\n";
 
   fs.writeFileSync(envPath, result, "utf-8");

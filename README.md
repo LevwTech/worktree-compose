@@ -222,7 +222,24 @@ Extra files/directories to copy from main into each worktree on start. Use for g
 
 ### `envOverrides`
 
-Additional env vars injected into `.env`. Supports `${VAR}` interpolation with allocated port values and `${COMPOSE_PROJECT_NAME}`. Use when env vars depend on allocated ports (e.g. `VITE_API_URL`) or on the per-worktree project name.
+Additional env vars to inject into each worktree's `.env`. Values may reference the per-worktree allocated ports and project name as `${...}` placeholders — `wtc` substitutes them at inject time. You don't supply the values of these placeholders; they're computed by `wtc`.
+
+Available placeholders:
+
+- `${COMPOSE_PROJECT_NAME}` — the per-worktree Compose project (e.g. `myapp-wt-1-feature-auth`). Always injected automatically as a top-level line in the managed block; this placeholder is for referencing that value inside your own overrides.
+- `${<SERVICE>_PORT}` — each allocated host port (e.g. `${BACKEND_PORT}`, `${POSTGRES_PORT}`).
+
+Example:
+
+```json
+{
+  "envOverrides": {
+    "VITE_API_URL": "http://localhost:${BACKEND_PORT}",
+    "SENTRY_ENVIRONMENT": "dev-${COMPOSE_PROJECT_NAME}",
+    "LOG_PREFIX": "[${COMPOSE_PROJECT_NAME}] "
+  }
+}
+```
 
 ## MCP Server
 

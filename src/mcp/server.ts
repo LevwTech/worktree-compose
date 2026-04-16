@@ -33,6 +33,7 @@ function startWorktrees(indices: number[]): string {
     injectPortOverrides(
       `${wt.path}/.env`,
       allocations,
+      project,
       ctx.config.envOverrides,
     );
 
