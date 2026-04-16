@@ -43,6 +43,42 @@ describe("buildOverrideBlock", () => {
     expect(block).toContain("VITE_API_URL=http://localhost:28001");
     expect(block).toContain("VITE_APP_URL=http://localhost:25174");
   });
+
+  it("writes COMPOSE_PROJECT_NAME when a project name is provided", () => {
+    const block = buildOverrideBlock(
+      allocations,
+      undefined,
+      "myapp-wt-1-feature-auth",
+    );
+    expect(block).toContain("COMPOSE_PROJECT_NAME=myapp-wt-1-feature-auth");
+  });
+
+  it("omits COMPOSE_PROJECT_NAME when no project name is provided", () => {
+    const block = buildOverrideBlock(allocations);
+    expect(block).not.toContain("COMPOSE_PROJECT_NAME");
+  });
+
+  it("interpolates ${COMPOSE_PROJECT_NAME} inside envOverrides", () => {
+    const block = buildOverrideBlock(
+      allocations,
+      {
+        STACK_LABEL: "stack:${COMPOSE_PROJECT_NAME}",
+        MIXED: "${COMPOSE_PROJECT_NAME}-${BACKEND_PORT}",
+      },
+      "myapp-wt-1-feature-auth",
+    );
+    expect(block).toContain("STACK_LABEL=stack:myapp-wt-1-feature-auth");
+    expect(block).toContain("MIXED=myapp-wt-1-feature-auth-28001");
+  });
+
+  it("replaces every occurrence of an interpolation token", () => {
+    const block = buildOverrideBlock(
+      allocations,
+      { DUP: "${BACKEND_PORT}/${BACKEND_PORT}" },
+      "myapp-wt-1-feature-auth",
+    );
+    expect(block).toContain("DUP=28001/28001");
+  });
 });
 
 describe("stripOverrideBlock", () => {
