@@ -132,18 +132,21 @@ Before starting, `wtc` copies infrastructure files from main into the worktree: 
 
 ### Env Injection
 
-After copying `.env`, `wtc` appends an idempotent block with allocated port overrides:
+After copying `.env`, `wtc` appends an idempotent block with the worktree's `COMPOSE_PROJECT_NAME` and allocated port overrides:
 
 ```bash
 # existing .env content stays untouched...
 
 # --- wtc port overrides ---
+COMPOSE_PROJECT_NAME=myapp-wt-1-feature-auth
 POSTGRES_PORT=25435
 REDIS_PORT=26381
 BACKEND_PORT=28001
 FRONTEND_PORT=25174
 # --- end wtc ---
 ```
+
+Because `COMPOSE_PROJECT_NAME` lives in `.env`, external tooling (Makefiles, raw `docker compose ...` invocations, editor tasks, etc.) running inside a worktree automatically targets the correct project.
 
 ## Commands
 
@@ -219,7 +222,24 @@ Extra files/directories to copy from main into each worktree on start. Use for g
 
 ### `envOverrides`
 
-Additional env vars injected into `.env`. Supports `${VAR}` interpolation with allocated port values. Use when env vars depend on allocated ports (e.g. `VITE_API_URL`).
+Additional env vars to inject into each worktree's `.env`. Values may reference the per-worktree allocated ports and project name as `${...}` placeholders — `wtc` substitutes them at inject time. You don't supply the values of these placeholders; they're computed by `wtc`.
+
+Available placeholders:
+
+- `${COMPOSE_PROJECT_NAME}` — the per-worktree Compose project (e.g. `myapp-wt-1-feature-auth`). Always injected automatically as a top-level line in the managed block; this placeholder is for referencing that value inside your own overrides.
+- `${<SERVICE>_PORT}` — each allocated host port (e.g. `${BACKEND_PORT}`, `${POSTGRES_PORT}`).
+
+Example:
+
+```json
+{
+  "envOverrides": {
+    "VITE_API_URL": "http://localhost:${BACKEND_PORT}",
+    "SENTRY_ENVIRONMENT": "dev-${COMPOSE_PROJECT_NAME}",
+    "LOG_PREFIX": "[${COMPOSE_PROJECT_NAME}] "
+  }
+}
+```
 
 ## MCP Server
 
